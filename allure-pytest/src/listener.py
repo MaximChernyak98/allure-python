@@ -43,16 +43,43 @@ class AllureListener:
 
     @allure_commons.hookimpl
     def start_step(self, uuid, title, params):
-        parameters = [Parameter(name=name, value=value) for name, value in params.items()]
-        step = TestStepResult(name=title, start=now(), parameters=parameters)
-        self.allure_logger.start_step(None, uuid, step)
+        if '--- Set up' in title:
+            parent_uuid = next(iter(self.allure_logger._items))
+            before_fixture = TestBeforeResult(name=title, start=now())
+            self.allure_logger.start_before_fixture(parent_uuid, uuid, before_fixture)
+            self.allure_logger.saved_before_fixture_uuid = uuid
+        elif '--- Tear down' in title:
+            parent_uuid = next(iter(self.allure_logger._items))
+            after_fixture = TestAfterResult(name=title, start=now())
+            self.allure_logger.start_after_fixture(parent_uuid, uuid, after_fixture)
+            self.allure_logger.saved_after_fixture_uuid = uuid
+        else:
+            parameters = [Parameter(name=name, value=value) for name, value in params.items()]
+            step = TestStepResult(name=title, start=now(), parameters=parameters)
+            self.allure_logger.start_step(None, uuid, step)
 
     @allure_commons.hookimpl
     def stop_step(self, uuid, exc_type, exc_val, exc_tb):
-        self.allure_logger.stop_step(uuid,
-                                     stop=now(),
-                                     status=get_status(exc_val),
-                                     statusDetails=get_status_details(exc_type, exc_val, exc_tb))
+        # Closing '--- Set up' step
+        if uuid == getattr(self.allure_logger, 'saved_before_fixture_uuid', None):
+            self.allure_logger.stop_before_fixture(self.allure_logger.saved_before_fixture_uuid,
+                                                   stop=now(),
+                                                   status=exc_val,
+                                                   statusDetails=get_status_details(exc_type, exc_val, exc_tb))
+        # Closing '--- Tear down' step
+        elif uuid == getattr(self.allure_logger, 'saved_after_fixture_uuid', None):
+            self.allure_logger.stop_after_fixture(self.allure_logger.saved_after_fixture_uuid,
+                                                  stop=now(),
+                                                  status=exc_val,
+                                                  statusDetails=get_status_details(exc_type, exc_val, exc_tb))
+
+
+        else:
+            self.allure_logger.stop_step(uuid,
+                                         stop=now(),
+                                         status=get_status(exc_val),
+                                         statusDetails=get_status_details(exc_type, exc_val, exc_tb))
+
 
     @allure_commons.hookimpl
     def start_fixture(self, parent_uuid, uuid, name):
