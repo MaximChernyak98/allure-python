@@ -13,7 +13,7 @@ try:
 except (DistributionNotFound, VersionConflict):
     pass
 
-PACKAGE = "allure-pytest"
+PACKAGE = "allure-pytest-mecher"
 
 classifiers = [
     'Development Status :: 5 - Production/Stable',
@@ -45,7 +45,7 @@ def prepare_version():
     from setuptools_scm import get_version
     configuration = {"root": "..",  "relative_to": __file__}
     version = get_version(**configuration)
-    install_requires.append(f"allure-python-commons=={version}")
+    install_requires.append(f"allure-python-commons==2.9.45")
     return configuration
 
 
