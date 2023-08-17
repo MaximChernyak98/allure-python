@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "allure-pytest-mecher"
-version = "2.12.11"
+version = "2.12.14"
 authors = [
   { name="Maksim Cherniak", email="maximchernyak98@gmail.com" },
 ]
