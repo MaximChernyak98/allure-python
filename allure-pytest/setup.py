@@ -13,7 +13,7 @@ try:
 except (DistributionNotFound, VersionConflict):
     pass
 
-PACKAGE = "allure-pytest"
+PACKAGE = "allure-pytest-mecher"
 
 classifiers = [
     'Development Status :: 5 - Production/Stable',
@@ -61,7 +61,7 @@ def main():
         url="https://github.com/allure-framework/allure-python",
         author="QAMetaSoftware, Stanislav Seliverstov",
         author_email="sseliverstov@qameta.io",
-        license="Apache-2.0",
+        license="MIT",
         classifiers=classifiers,
         keywords="allure reporting pytest",
         long_description=get_readme('README.rst'),
