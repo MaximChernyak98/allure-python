@@ -45,7 +45,7 @@ def prepare_version():
     from setuptools_scm import get_version
     configuration = {"root": "..",  "relative_to": __file__}
     version = get_version(**configuration)
-    install_requires.append(f"allure-python-commons==2.13.2")
+    install_requires.append(f"allure-python-commons=={version}")
     return configuration
 
 
@@ -61,7 +61,7 @@ def main():
         url="https://github.com/allure-framework/allure-python",
         author="QAMetaSoftware, Stanislav Seliverstov",
         author_email="sseliverstov@qameta.io",
-        license="Apache-2.0",
+        license="MIT",
         classifiers=classifiers,
         keywords="allure reporting pytest",
         long_description=get_readme('README.rst'),
