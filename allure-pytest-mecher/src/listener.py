@@ -64,13 +64,13 @@ class AllureListener:
         if uuid == getattr(self.allure_logger, 'saved_before_fixture_uuid', None):
             self.allure_logger.stop_before_fixture(self.allure_logger.saved_before_fixture_uuid,
                                                    stop=now(),
-                                                   status=exc_val,
+                                                   status=get_status(exc_val),
                                                    statusDetails=get_status_details(exc_type, exc_val, exc_tb))
         # Closing '--- Tear down' step
         elif uuid == getattr(self.allure_logger, 'saved_after_fixture_uuid', None):
             self.allure_logger.stop_after_fixture(self.allure_logger.saved_after_fixture_uuid,
                                                   stop=now(),
-                                                  status=exc_val,
+                                                  status=get_status(exc_val),
                                                   statusDetails=get_status_details(exc_type, exc_val, exc_tb))
 
 
